@@ -1,31 +1,48 @@
 # LangSec-SysML-Prototype
 
-This repository demonstrates the feasibility of using **SysML models** in Cameo to define message grammars and automatically generate **secure parsers** using **ANTLR**. It follows the LANGSEC principle of making input structure explicit, verifiable, and machine-readable.
----
+This repository provides a rudimentary proof of concept (PoC) of the feasibility of using SysML models in Cameo to define message grammars and automatically generate secure parsers using ANTLR. It follows the LANGSEC principle of making input structure explicit, verifiable, and machine-readable.
+
+## Description
+
+This project uses a minimal SysML block model to represent a simple, structured software message called **Heartbeat**. The model defines a message with three fields:
+ - counter
+ - status
+ - checksum
+Each of these fields is modeled as a value property inside a Block in Cameo. The objective is to annotate these properties with formal grammar rules, extract them programmatically, and generate a parser that can enforce message correctness based on the model. The purpose of this PoC is to show that interface contracts modeled in SysML can be used to drive secure input validation instead of writing ad hoc parsers by hand.
+
+The repository contains:
+- The SysML Model: A Cameo `.mdzip` file defining a HeartbeatMessage block. Each property is annotated with a custom <<GrammarRule>> stereotype containing a ruleText tag.
+- Jython script: A script runnable inside Cameo’s Jython console that traverses the model, extracts each field’s name and grammar rule, and prints a complete ANTLR `.g4` grammar definition to the Messages pane.
+- ANTLR grammar: A `.g4` grammar file generated from the model.
+- ANTLR-Generated Parser Files
+- Test Script
 
 ## Objective
 
-Show that a system model in SysML can:
+This PoC shows that:
 
 - Define message structure using stereotypes and tags
 - Be programmatically extracted using Jython (Cameo’s OpenAPI)
 - Generate a `.g4` grammar for ANTLR
 - Produce a working parser that accepts **only valid input**
-- Be run without installing extra tools beyond Cameo, Java, and Python
 
+## Getting Started:
+
+If you want to test the parser only, skip directly to Step 5.
+If you want to build from scratch, follow all steps below.
 
 ## Step 1: Build the SysML Model in Cameo
 
 ### 1.1 Create a New Project
 
 - Open Cameo
-- File → New Project → Name it something like `ParserModelDemo`
+- File → New Project → Name it
 
-### 1.2 Create a Block Named `HeartbeatMessage`
+### 1.2 Create a Block Named `Heartbeat`
 
 1. In the **Containment Tree**, right-click on the top-level `Model`  
 2. Select: `Create Element → Block`  
-3. Name the block: `HeartbeatMessage`
+3. Name the block: `Heartbeat`
 
 ### 1.3 Add Value Properties
 
@@ -34,7 +51,7 @@ Each **Value Property** defines a field in the message structure. You will add:
 | Name      | Type    | Purpose                          |
 |-----------|---------|----------------------------------|
 | `counter` | Integer | A message sequence or counter ID |
-| `status`  | Integer | Status field (0 or 1 expected)   |
+| `status`  | Integer | Status field                     |
 | `checksum`| Integer | Final checksum or CRC byte       |
 
 #### How to Add:
@@ -48,13 +65,12 @@ Each **Value Property** defines a field in the message structure. You will add:
 
 You now have a block that structurally defines a 3-field message.
 
----
 
 ## Step 2: Create and Apply a Custom Stereotype
 
 ### 2.1 Create a Profile
 
-1. In the Containment Tree, right-click a **Package** (not the root `Model`)
+1. In the Containment Tree, create a **Package**, right-click the **Package**
 2. Select `Create Element → Profile`
 3. Name it: `ParserProfile`
 
@@ -80,11 +96,8 @@ You now have a block that structurally defines a 3-field message.
 3. In **Tags**, set:
    - `ruleText = INT`
 
-You now have a model that not only defines structure, but **declares grammar semantics**.
 
----
-
-## 🐍 Step 3: Extract Grammar Using Jython in Cameo
+## Step 3: Extract Grammar Using Jython in Cameo
 
 ### 3.1 Open the Jython Console
 
@@ -92,50 +105,7 @@ You now have a model that not only defines structure, but **declares grammar sem
 
 ### 3.2 Run the Script
 
-Paste this into the console:
-
-```python
-from com.nomagic.magicdraw.core import Application
-from com.nomagic.uml2.ext.jmi.helpers import StereotypesHelper
-from com.nomagic.uml2.ext.magicdraw.classes.mdkernel import Class, Property, Package
-
-project = Application.getInstance().getProject()
-log = Application.getInstance().getGUILog()
-model = project.getModel()
-
-def find_block(name):
-    for element in model.getOwnedElement():
-        if isinstance(element, Class) and element.getName() == name:
-            return element
-    return None
-
-def find_stereotype():
-    for element in model.getOwnedElement():
-        if isinstance(element, Package) and element.getName() == "ModelingCore":
-            for subelement in element.getOwnedElement():
-                try:
-                    if subelement.getName() == "ParserProfile":
-                        for s in subelement.getOwnedElement():
-                            if s.getName() == "GrammarRule":
-                                return s
-                except:
-                    continue
-    return None
-
-block = find_block("HeartbeatMessage")
-stereotype = find_stereotype()
-
-if block and stereotype:
-    log.log("grammar Heartbeat;\n")
-    log.log("heartbeat: " + " ".join([p.getName() for p in block.getOwnedAttribute()]) + " EOF;\n")
-    for attr in block.getOwnedAttribute():
-        if isinstance(attr, Property):
-            if StereotypesHelper.hasStereotype(attr, stereotype):
-                val = StereotypesHelper.getStereotypePropertyValue(attr, stereotype, "ruleText")
-                log.log("%s: %s;" % (attr.getName(), val[0] if val else "<empty>"))
-    log.log("\nINT: [0-9]+;")
-    log.log("WS: [ \\t\\r\\n]+ -> skip;")
-```
+Paste the code in `Seed_Macro` into the console. Run it. It will provide an output of the `.g4` file. Save the output as Heartbeat.g4
 
 ## Step 4: Generate a Parser with ANTLR
 
@@ -148,25 +118,9 @@ if block and stereotype:
   pip install antlr4-python3-runtime
 ```
 Download antlr from: ```https://www.antlr.org/download.html```
-Save to same directory as your project
+Save to same directory as your project and rename `antlr.jar`
 
-### 4.2 Save Grammar to File
-
-Save the output as Heartbeat.g4:
-```
-grammar Heartbeat;
-
-heartbeat: counter status checksum EOF;
-
-counter: INT;
-status: INT;
-checksum: INT;
-
-INT: [0-9]+;
-WS: [ \t\r\n]+ -> skip;
-```
-
-### 4.3 Generate Parser Code
+### 4.2 Generate Parser Code
 
 ```
 java -jar antlr.jar -Dlanguage=Python3 Heartbeat.g4
