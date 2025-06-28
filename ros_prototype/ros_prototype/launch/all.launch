@@ -1,0 +1,8 @@
+<launch>
+  <node name="j1939_input_node" pkg="amp_chal_ros" type="j1939_input_node" output="screen"/>
+  <node name="j1939_output_node" pkg="amp_chal_ros" type="j1939_output_node" output="screen"/>
+  <node name="transport" pkg="amp_chal_ros" type="transport" output="screen"/>
+  <node name="command" pkg="amp_chal_ros" type="command" output="screen"/>
+  <node name="spn" pkg="amp_chal_ros" type="spn" output="screen"/>
+
+</launch>
