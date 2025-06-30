@@ -11,14 +11,15 @@ This project uses a minimal SysML block model to represent a simple, structured 
 Each of these fields is modeled as a value property inside a Block in Cameo. The objective is to annotate these properties with formal grammar rules, extract them programmatically, and generate a parser that can enforce message correctness based on the model. The purpose of this PoC is to show that interface contracts modeled in SysML can be used to drive secure input validation instead of writing ad hoc parsers by hand.
 
 <!--
-
 The repository contains:
 - The SysML Model: A Cameo `.mdzip` file defining a HeartbeatMessage block. Each property is annotated with a custom <<GrammarRule>> stereotype containing a ruleText tag.
 - Jython script: A script runnable inside Cameo’s Jython console that traverses the model, extracts each field’s name and grammar rule, and prints a complete ANTLR `.g4` grammar definition to the Messages pane.
 - ANTLR grammar: A `.g4` grammar file generated from the model.
 - ANTLR-Generated Parser Files
-- Test Script
+- Test Script 
+-- >
 
+<!--
 ## Objective
 
 This PoC shows that:
