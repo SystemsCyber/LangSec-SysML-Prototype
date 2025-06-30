@@ -1,14 +1,16 @@
 # LangSec-SysML-Prototype
 
-This repository provides a rudimentary proof of concept (PoC) of the feasibility of using SysML models in Cameo to define message grammars and automatically generate secure parsers using ANTLR. It follows the LANGSEC principle of making input structure explicit, verifiable, and machine-readable. Further testing for a ROS1 project is also being added.....
+This repository provides a rudimentary proof of concept (PoC) of the feasibility of using SysML models in Cameo to define message grammars and automatically generate secure parsers using ANTLR. It follows the LANGSEC principle of making input structure explicit, verifiable, and machine-readable. Further testing for a ROS1 project is also being integrated. The current ROS deployment includes ROS integration on a BeagleBone Black, enabling integration with J1939/CAN networks as a basic parser for command and request messages.
 
-## Description
+## SysML Description
 
 This project uses a minimal SysML block model to represent a simple, structured software message called **Heartbeat**. The model defines a message with three fields:
  - counter
  - status
  - checksum
 Each of these fields is modeled as a value property inside a Block in Cameo. The objective is to annotate these properties with formal grammar rules, extract them programmatically, and generate a parser that can enforce message correctness based on the model. The purpose of this PoC is to show that interface contracts modeled in SysML can be used to drive secure input validation instead of writing ad hoc parsers by hand.
+
+<!--
 
 The repository contains:
 - The SysML Model: A Cameo `.mdzip` file defining a HeartbeatMessage block. Each property is annotated with a custom <<GrammarRule>> stereotype containing a ruleText tag.
@@ -131,4 +133,4 @@ java -jar antlr.jar -Dlanguage=Python3 Heartbeat.g4
 python test_heartbeat.py
 ```
 
-Change: ```input_stream = InputStream("123 1 999")``` to ```input_stream = InputStream("123 X 999")``` or ```input_stream = InputStream("123 1 999 22")``` to test out invalid inputs
+Change: ```input_stream = InputStream("123 1 999")``` to ```input_stream = InputStream("123 X 999")``` or ```input_stream = InputStream("123 1 999 22")``` to test out invalid inputs -->
