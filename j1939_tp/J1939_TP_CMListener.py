@@ -17,12 +17,30 @@ class J1939_TP_CMListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by J1939_TP_CMParser#controlByte.
-    def enterControlByte(self, ctx:J1939_TP_CMParser.ControlByteContext):
+    # Enter a parse tree produced by J1939_TP_CMParser#controlByte_rts.
+    def enterControlByte_rts(self, ctx:J1939_TP_CMParser.ControlByte_rtsContext):
         pass
 
-    # Exit a parse tree produced by J1939_TP_CMParser#controlByte.
-    def exitControlByte(self, ctx:J1939_TP_CMParser.ControlByteContext):
+    # Exit a parse tree produced by J1939_TP_CMParser#controlByte_rts.
+    def exitControlByte_rts(self, ctx:J1939_TP_CMParser.ControlByte_rtsContext):
+        pass
+
+
+    # Enter a parse tree produced by J1939_TP_CMParser#tp_cm_cts.
+    def enterTp_cm_cts(self, ctx:J1939_TP_CMParser.Tp_cm_ctsContext):
+        pass
+
+    # Exit a parse tree produced by J1939_TP_CMParser#tp_cm_cts.
+    def exitTp_cm_cts(self, ctx:J1939_TP_CMParser.Tp_cm_ctsContext):
+        pass
+
+
+    # Enter a parse tree produced by J1939_TP_CMParser#controlByte_cts.
+    def enterControlByte_cts(self, ctx:J1939_TP_CMParser.ControlByte_ctsContext):
+        pass
+
+    # Exit a parse tree produced by J1939_TP_CMParser#controlByte_cts.
+    def exitControlByte_cts(self, ctx:J1939_TP_CMParser.ControlByte_ctsContext):
         pass
 
 
@@ -50,6 +68,33 @@ class J1939_TP_CMListener(ParseTreeListener):
 
     # Exit a parse tree produced by J1939_TP_CMParser#maxPacketsPerCTS.
     def exitMaxPacketsPerCTS(self, ctx:J1939_TP_CMParser.MaxPacketsPerCTSContext):
+        pass
+
+
+    # Enter a parse tree produced by J1939_TP_CMParser#numPackets.
+    def enterNumPackets(self, ctx:J1939_TP_CMParser.NumPacketsContext):
+        pass
+
+    # Exit a parse tree produced by J1939_TP_CMParser#numPackets.
+    def exitNumPackets(self, ctx:J1939_TP_CMParser.NumPacketsContext):
+        pass
+
+
+    # Enter a parse tree produced by J1939_TP_CMParser#nextPacket.
+    def enterNextPacket(self, ctx:J1939_TP_CMParser.NextPacketContext):
+        pass
+
+    # Exit a parse tree produced by J1939_TP_CMParser#nextPacket.
+    def exitNextPacket(self, ctx:J1939_TP_CMParser.NextPacketContext):
+        pass
+
+
+    # Enter a parse tree produced by J1939_TP_CMParser#reserved.
+    def enterReserved(self, ctx:J1939_TP_CMParser.ReservedContext):
+        pass
+
+    # Exit a parse tree produced by J1939_TP_CMParser#reserved.
+    def exitReserved(self, ctx:J1939_TP_CMParser.ReservedContext):
         pass
 
 

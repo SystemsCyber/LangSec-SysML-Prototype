@@ -89,13 +89,20 @@ def generate_grammar():
 
         # Collect fields
         for prop in block.getOwnedAttribute():
+            #log.log("In loop")
             if not isinstance(prop, Property):
+                continue      
+            #log.log("Found Property trying field")
+            if not any(s.getName() == "Field" for s in StereotypesHelper.getStereotypes(prop)):
                 continue
-            if not StereotypesHelper.hasStereotypeOrDerived(prop, "Field"):
-                continue
-
+            #log.log("Trying to find start")
             # Start tag
-            start_vals = StereotypesHelper.getStereotypePropertyValue(prop, "Field", "start")
+            start_vals = None
+            for s in StereotypesHelper.getStereotypes(prop):
+                if s.getName() == "Field":
+                    start_vals = StereotypesHelper.getStereotypePropertyValue(prop, s, "start")
+                    break 
+            #log.log("Start") 
             if not start_vals or len(start_vals) == 0:
                 log.log("WARNING: Field '{}' missing start tag, skipping.".format(prop.getName()))
                 continue
@@ -126,7 +133,7 @@ def generate_grammar():
                     "fixedHex": None,
                     "comment": prop.getName()
                 })
-
+        #log.log(str(field_info))
         # Sort by byte position
         field_info.sort(key=lambda x: x["start"])
         if len(field_info) == 0:
