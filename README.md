@@ -2,6 +2,11 @@
 
 This repository provides a rudimentary proof of concept (PoC) of the feasibility of using SysML models in Cameo to define message grammars and automatically generate secure parsers using ANTLR. It follows the LANGSEC principle of making input structure explicit, verifiable, and machine-readable. Further testing for a ROS1 project is also being integrated. The current ROS deployment includes ROS integration on a BeagleBone Black, enabling integration with J1939/CAN networks as a basic parser for command and request messages.
 
+# PoC for J1939TP Grammar Rule Extractor and Parser Generation and Testing
+
+https://github.com/user-attachments/assets/41047307-96cd-4fba-8c59-4faa22b316c7
+
+https://github.com/user-attachments/assets/19f6bcf2-f995-4eaa-97fe-7b8121ccdf53
 
 
 <!--
